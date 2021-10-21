@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: change authenthication to yes
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      state: present
+    with_items:
+    - regexp: "^#PasswordAuthentication"
+      line: "PasswordAuthentication yes"
+    - regexp: "^#Port"
+      line: "Port 22"
+    - regexp: "^#PermitRootLogin"
+      line: "PermitRootLogin yes"
+    notify: restart ssh
+  handlers:
+  - name: restart ssh
+    service:
+      name: ssh
+      state: restarted
