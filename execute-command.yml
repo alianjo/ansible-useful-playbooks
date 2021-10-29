@@ -1,0 +1,10 @@
+---
+- name: see the uptime in all servers
+  hosts: all
+  tasks:
+  - name: execute commands
+    command: uptime
+    register: foo
+
+  - name: show result of previous command
+    debug: var=foo.stdout
